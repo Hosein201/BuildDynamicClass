@@ -15,9 +15,9 @@ namespace CreateClassWithReflection
         }
 
         [Benchmark]
-        public object StaticClass()
+        public object PhysicalClass()
         {
-            return new StaticPerson { Id = 1, Name = "Hossein" };
+            return new PhysicalPerson { Id = 1, Name = "Hossein" };
         }
 
         [Benchmark]
@@ -29,6 +29,7 @@ namespace CreateClassWithReflection
                   new Type[] { typeof(int), typeof(string) },
                   new object[] { 1, "Hossein" });
         }
+
         /// <summary>
         /// build dynamic class in run time
         /// </summary>
