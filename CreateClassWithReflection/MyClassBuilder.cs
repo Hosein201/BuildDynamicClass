@@ -1,16 +1,34 @@
-﻿using System.Reflection;
+﻿using BenchmarkDotNet.Attributes;
+using CreateClassWithReflection.Model;
+using System.Reflection;
 using System.Reflection.Emit;
 
 namespace CreateClassWithReflection
 {
+    [MemoryDiagnoser]
     public class MyClassBuilder
     {
         AssemblyName asemblyName;
-        public MyClassBuilder(string ClassName)
+        public MyClassBuilder()
         {
-            this.asemblyName = new AssemblyName(ClassName);
+            this.asemblyName = new AssemblyName("DynamicPerson");
         }
 
+        [Benchmark]
+        public object StaticClass()
+        {
+            return new StaticPerson { Id = 1, Name = "Hossein" };
+        }
+
+        [Benchmark]
+        public object DynamicClass()
+        {
+
+            return CreateDynamicClass(
+                  new string[] { "Id", "Name" },
+                  new Type[] { typeof(int), typeof(string) },
+                  new object[] { 1, "Hossein" });
+        }
         /// <summary>
         /// build dynamic class in run time
         /// </summary>
@@ -18,7 +36,8 @@ namespace CreateClassWithReflection
         /// <param name="types"> types of props </param>
         /// <param name="values">values of props</param>
         /// <returns></returns>
-        public object BuildDynamicClass(string[] propertyNames, Type[] types, object[] values)
+
+        private object CreateDynamicClass(string[] propertyNames, Type[] types, object[] values)
         {
             if (propertyNames.Length != types.Length || propertyNames.Length != values.Length || types.Length != values.Length)
                 throw new ArgumentOutOfRangeException("The number of property names should match their corresopnding types number and values number ");

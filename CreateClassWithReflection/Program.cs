@@ -1,4 +1,5 @@
-﻿using CreateClassWithReflection;
+﻿using BenchmarkDotNet.Running;
+using CreateClassWithReflection;
 
 public class Program
 {
@@ -6,12 +7,8 @@ public class Program
     {
         try
         {
-            MyClassBuilder myClassBuilder = new MyClassBuilder("Person");
-
-            var dynamicClass = myClassBuilder.BuildDynamicClass(
-                new string[] { "id", "name" },
-                new Type[] { typeof(int) },
-                new object[] { 1, "Hossein" });
+            var summary = BenchmarkRunner.Run<MyClassBuilder>();
+            Console.WriteLine(summary);
 
             Console.ReadKey();
         }
